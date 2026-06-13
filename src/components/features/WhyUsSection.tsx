@@ -1,140 +1,117 @@
-import { Zap, Shield, Truck, Settings, HeadphonesIcon, TrendingUp } from "lucide-react";
-import { useState } from "react";
+import { Shield, Clock, Settings, Zap, Headphones, DollarSign } from "lucide-react";
 
-const REASONS = [
+const advantages = [
   {
+    num: "01",
     icon: Shield,
     title: "Uncompromised Quality",
-    description: "Every can undergoes 7-step quality inspection including pressure testing, seam integrity, and coating adhesion checks before dispatch.",
-    metric: "99.7%",
-    metricLabel: "Quality Pass Rate",
+    desc: "Every can undergoes 7-step quality inspection including pressure testing, seam integrity, and coating adhesion checks.",
+    stat: "99.7%",
+    statLabel: "Quality Pass Rate",
+    color: "#e85a1e",
   },
   {
-    icon: Truck,
+    num: "02",
+    icon: Clock,
     title: "On-Time Delivery",
-    description: "Strategically located near major industrial hubs with a dedicated logistics fleet ensuring your orders arrive on schedule, every time.",
-    metric: "98%",
-    metricLabel: "On-Time Delivery",
+    desc: "Strategically located near major industrial hubs with a dedicated logistics fleet ensuring orders arrive on schedule.",
+    stat: "98%",
+    statLabel: "On-Time Delivery",
+    color: "#0f4a26",
   },
   {
+    num: "03",
     icon: Settings,
     title: "Custom Manufacturing",
-    description: "From unique shapes to custom dimensions and printing — our CNC-equipped facility can produce tailored solutions for your specific needs.",
-    metric: "500+",
-    metricLabel: "Custom Designs",
+    desc: "From unique shapes to custom dimensions and printing — our CNC-equipped facility produces tailored solutions.",
+    stat: "500+",
+    statLabel: "Custom Designs",
+    color: "#d4920a",
   },
   {
+    num: "04",
     icon: Zap,
     title: "High-Speed Production",
-    description: "Advanced automated production lines capable of producing up to 2 million cans per month, scaling with your demand.",
-    metric: "2M+",
-    metricLabel: "Monthly Capacity",
+    desc: "Advanced automated production lines capable of producing up to 2 million cans per month, scaling with demand.",
+    stat: "2M+",
+    statLabel: "Monthly Capacity",
+    color: "#e85a1e",
   },
   {
-    icon: HeadphonesIcon,
+    num: "05",
+    icon: Headphones,
     title: "Dedicated Support",
-    description: "A dedicated account manager for each client, with 24/7 support for urgent queries and technical assistance.",
-    metric: "24/7",
-    metricLabel: "Support Available",
+    desc: "A dedicated account manager for each client, with 24/7 support for urgent queries and technical assistance.",
+    stat: "24/7",
+    statLabel: "Support Available",
+    color: "#0f4a26",
   },
   {
-    icon: TrendingUp,
+    num: "06",
+    icon: DollarSign,
     title: "Competitive Pricing",
-    description: "Vertical integration across our supply chain allows us to offer premium quality at market-competitive prices with bulk discounts.",
-    metric: "30%",
-    metricLabel: "Cost Savings",
+    desc: "Vertical integration across our supply chain allows us to offer premium quality at market-competitive prices.",
+    stat: "30%",
+    statLabel: "Cost Savings",
+    color: "#d4920a",
   },
 ];
 
 export default function WhyUsSection() {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-
   return (
-    <section id="why-us" className="relative py-32 bg-black overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-amber-500/3 blur-[100px]" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-20">
-          <div className="reveal reveal-up reveal-delay-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-400 text-xs font-semibold uppercase tracking-widest mb-6">
-            Why Choose Us
-          </div>
-          <h2
-            className="reveal reveal-up reveal-delay-2 text-6xl sm:text-7xl font-black text-white mb-4"
-            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-          >
-            THE{" "}
-            <span className="metallic-text">VAISHNAV</span>{" "}
-            ADVANTAGE
+    <section id="why-us" className="py-24 bg-[#f7f5f0]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="text-center mb-16">
+          <span className="reveal text-[#e85a1e] text-sm font-semibold uppercase tracking-widest">Why Choose Us</span>
+          <h2 className="reveal font-display font-extrabold text-4xl lg:text-5xl text-[#0a2e1a] mt-3">
+            The Vaishnav <span className="text-[#0f4a26]">Advantage</span>
           </h2>
-          <p className="reveal reveal-up reveal-delay-3 text-white/50 text-lg max-w-2xl mx-auto">
+          <p className="reveal text-[#0a2e1a]/50 text-base mt-4 max-w-xl mx-auto">
             Six pillars that make us India's most trusted tin can manufacturer.
           </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {REASONS.map((reason, i) => (
-            <div
-              key={reason.title}
-              className={`reveal reveal-up reveal-delay-${Math.min(i + 1, 6)} relative p-8 border transition-all duration-500 cursor-default overflow-hidden group ${
-                hoveredIdx === i
-                  ? "border-amber-500 bg-amber-500/5"
-                  : "border-white/10 hover:border-amber-500/30"
-              }`}
-              style={{ background: hoveredIdx === i ? "hsla(43,84%,47%,0.05)" : "hsl(20,10%,6%)" }}
-              onMouseEnter={() => setHoveredIdx(i)}
-              onMouseLeave={() => setHoveredIdx(null)}
-            >
-              {/* Number watermark */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {advantages.map((item, i) => {
+            const Icon = item.icon;
+            return (
               <div
-                className="absolute top-4 right-6 text-6xl font-black text-white/3"
-                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                key={item.num}
+                className="reveal card-hover bg-white rounded-3xl p-7 border border-black/5 group relative overflow-hidden"
+                style={{ transitionDelay: `${i * 0.08}s` }}
               >
-                0{i + 1}
-              </div>
-
-              {/* Icon */}
-              <div
-                className={`w-12 h-12 mb-6 flex items-center justify-center rounded-sm transition-all duration-300 ${
-                  hoveredIdx === i ? "bg-amber-500 text-black" : "bg-amber-500/10 text-amber-500"
-                }`}
-              >
-                <reason.icon size={22} />
-              </div>
-
-              {/* Title */}
-              <h3
-                className="text-xl font-black text-white mb-3 transition-colors duration-300 group-hover:text-amber-400"
-                style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.04em" }}
-              >
-                {reason.title}
-              </h3>
-
-              <p className="text-white/50 text-sm leading-relaxed mb-6">{reason.description}</p>
-
-              {/* Metric */}
-              <div className="flex items-end gap-2 border-t border-white/10 pt-4">
+                {/* Number watermark */}
                 <span
-                  className="text-3xl font-black text-amber-500"
-                  style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                  className="absolute top-4 right-5 font-display font-extrabold text-6xl opacity-5 leading-none pointer-events-none select-none"
+                  style={{ color: item.color }}
                 >
-                  {reason.metric}
+                  {item.num}
                 </span>
-                <span className="text-white/30 text-xs uppercase tracking-widest mb-1">
-                  {reason.metricLabel}
-                </span>
-              </div>
 
-              {/* Bottom accent line */}
-              <div
-                className={`absolute bottom-0 left-0 h-0.5 bg-amber-500 transition-all duration-700 ${
-                  hoveredIdx === i ? "w-full" : "w-0"
-                }`}
-              />
-            </div>
-          ))}
+                {/* Icon */}
+                <div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110"
+                  style={{ backgroundColor: item.color + "15" }}
+                >
+                  <Icon size={22} style={{ color: item.color }} />
+                </div>
+
+                <h3 className="font-display font-bold text-xl text-[#0a2e1a] mb-2">{item.title}</h3>
+                <p className="text-[#0a2e1a]/55 text-sm leading-relaxed mb-5">{item.desc}</p>
+
+                {/* Stat */}
+                <div className="flex items-end gap-2 pt-4 border-t border-black/5">
+                  <span
+                    className="font-display font-extrabold text-2xl"
+                    style={{ color: item.color }}
+                  >
+                    {item.stat}
+                  </span>
+                  <span className="text-[#0a2e1a]/40 text-xs uppercase tracking-wide mb-0.5">{item.statLabel}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

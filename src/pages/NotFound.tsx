@@ -1,40 +1,27 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
-const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
-
+export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black">
+    <main className="min-h-screen bg-[#0a2e1a] flex items-center justify-center px-6">
       <div className="text-center">
         <div
-          className="text-[200px] font-black leading-none mb-4"
-          style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            background: "linear-gradient(135deg, #c8a84b, #f5d38a, #b8860b)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
+          className="font-display font-extrabold text-[120px] lg:text-[200px] leading-none text-white/5 pointer-events-none select-none"
         >
           404
         </div>
-        <p className="text-white/50 text-xl mb-8 uppercase tracking-widest">Page Not Found</p>
-        <a
-          href="/"
-          className="px-8 py-3 bg-amber-500 text-black font-bold uppercase tracking-widest hover:bg-amber-400 transition-colors duration-300"
-        >
-          Return Home
-        </a>
+        <div className="-mt-8">
+          <h1 className="font-display font-extrabold text-4xl text-white mb-3">Page Not Found</h1>
+          <p className="text-white/50 mb-8">The page you're looking for doesn't exist.</p>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 bg-[#4ade80] text-[#0a2e1a] px-7 py-3.5 rounded-full font-bold hover:bg-[#22c55e] transition-all duration-300 hover:scale-105"
+          >
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
+        </div>
       </div>
-    </div>
+    </main>
   );
-};
-
-export default NotFound;
+}

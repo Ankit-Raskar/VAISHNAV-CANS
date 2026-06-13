@@ -1,228 +1,206 @@
-import { useEffect, useRef } from "react";
-import heroImg from "@/assets/hero-cans.jpg";
-import canImg from "@/assets/can-hero.png";
-import { ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import heroCan from "@/assets/hero-can.png";
 
-const PARTICLES = [
-  { top: "15%", left: "8%", size: "6px", delay: "0s" },
-  { top: "25%", left: "88%", size: "4px", delay: "0.5s" },
-  { top: "60%", left: "5%", size: "8px", delay: "1s" },
-  { top: "70%", left: "92%", size: "5px", delay: "0.3s" },
-  { top: "40%", left: "95%", size: "3px", delay: "1.2s" },
-  { top: "80%", left: "15%", size: "7px", delay: "0.8s" },
-  { top: "10%", left: "50%", size: "4px", delay: "0.4s" },
-  { top: "55%", left: "78%", size: "6px", delay: "1.5s" },
+const slides = [
+  {
+    tag: "PREMIUM PACKAGING SOLUTIONS",
+    title: "India's Most Trusted",
+    titleAccent: "Can Manufacturer",
+    sub: "Engineering precision-crafted tin containers for every industry — from food-grade to chemical applications since 1999.",
+    bg: "from-[#0a2e1a] via-[#0f4a26] to-[#155e32]",
+    tagline: "I Can · You Can · We Can",
+  },
+  {
+    tag: "ISO 9001:2015 CERTIFIED",
+    title: "25+ Years of",
+    titleAccent: "Crafting Excellence",
+    sub: "Over 50 million cans delivered across 500+ clients. Quality that speaks louder than words.",
+    bg: "from-[#0d2a3a] via-[#0f3a52] to-[#1a4d6e]",
+    tagline: "Quality · Precision · Reliability",
+  },
+  {
+    tag: "CUSTOM MANUFACTURING",
+    title: "Your Vision,",
+    titleAccent: "Our Precision",
+    sub: "From unique shapes to custom dimensions and printing — our CNC-equipped facility delivers tailored solutions.",
+    bg: "from-[#2a1a0a] via-[#3d2810] to-[#4f3518]",
+    tagline: "Custom · Scalable · Fast",
+  },
 ];
 
 export default function HeroSection() {
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const [active, setActive] = useState(0);
+  const [animating, setAnimating] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const letters = titleRef.current?.querySelectorAll(".letter");
-    letters?.forEach((el, i) => {
-      (el as HTMLElement).style.animationDelay = `${0.5 + i * 0.07}s`;
-      (el as HTMLElement).style.animationFillMode = "both";
-    });
+    setLoaded(true);
   }, []);
 
-  const scrollToProducts = () => {
-    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+  const goTo = (idx: number) => {
+    if (animating) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setActive(idx);
+      setAnimating(false);
+    }, 350);
   };
 
+  const prev = () => goTo((active - 1 + slides.length) % slides.length);
+  const next = () => goTo((active + 1) % slides.length);
+
+  useEffect(() => {
+    const t = setInterval(next, 6000);
+    return () => clearInterval(t);
+  }, [active]);
+
+  const slide = slides[active];
+
   return (
-    <section
-      id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black"
-    >
-      {/* Background image with parallax */}
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-25"
-        style={{ backgroundImage: `url(${heroImg})` }}
-      />
+    <section className={`relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br ${slide.bg} transition-all duration-700`}>
+      {/* Decorative radial glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-white/4 rounded-full blur-2xl" />
+      </div>
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-black" />
-
-      {/* Grid lines */}
+      {/* Grid lines overlay */}
       <div
-        className="absolute inset-0 opacity-5"
+        className="absolute inset-0 opacity-10 pointer-events-none"
         style={{
-          backgroundImage:
-            "linear-gradient(hsl(43,84%,47%) 1px, transparent 1px), linear-gradient(90deg, hsl(43,84%,47%) 1px, transparent 1px)",
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)",
           backgroundSize: "80px 80px",
         }}
       />
 
-      {/* Floating particles */}
-      {PARTICLES.map((p, i) => (
-        <div
-          key={i}
-          className={`absolute rounded-full bg-amber-500 animate-particle-${(i % 5) + 1}`}
-          style={{ top: p.top, left: p.left, width: p.size, height: p.size, animationDelay: p.delay }}
-        />
-      ))}
-
-      {/* Scan line effect */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-amber-500/40 to-transparent"
-          style={{ animation: "floatSlow 4s ease-in-out infinite", top: "30%" }}
-        />
+      {/* Vertical text */}
+      <div className="absolute right-8 top-1/2 -translate-y-1/2 hidden xl:flex">
+        <span
+          className="text-white/20 text-xs font-display font-bold tracking-[0.4em] uppercase"
+          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+        >
+          {slide.tagline}
+        </span>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center min-h-screen pt-24 pb-16">
-        {/* Left Content */}
-        <div className="flex flex-col justify-center">
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-400 text-xs font-semibold uppercase tracking-widest w-fit mb-8"
-            style={{ animation: "slideInLeft 0.8s ease 0.2s both" }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-            Premium Can Manufacturer Since 1999
-          </div>
-
-          {/* Main Heading */}
-          <h1
-            ref={titleRef}
-            className="text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black text-white leading-none mb-6"
-            style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "0.02em" }}
-          >
-            {"VAISHNAV".split("").map((l, i) => (
-              <span
-                key={i}
-                className="letter inline-block text-amber-500"
-                style={{ animation: "slideInUp 0.5s ease both" }}
-              >
-                {l}
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full pt-24 pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className={`transition-all duration-500 ${animating ? "opacity-0 translate-y-6" : "opacity-100 translate-y-0"}`}>
+            <div className={`transition-all duration-700 delay-100 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+              <span className="inline-block bg-white/15 text-white/90 text-xs font-semibold tracking-[0.2em] uppercase px-4 py-2 rounded-full border border-white/20 mb-6 backdrop-blur-sm">
+                {slide.tag}
               </span>
-            ))}
-            <br />
-            {"CANS".split("").map((l, i) => (
-              <span
-                key={i}
-                className="letter inline-block text-white"
-                style={{ animation: "slideInUp 0.5s ease both" }}
-              >
-                {l}
-              </span>
-            ))}
-          </h1>
+            </div>
 
-          {/* Tagline */}
-          <div
-            className="flex items-center gap-3 mb-8"
-            style={{ animation: "slideInLeft 0.8s ease 1.2s both" }}
-          >
-            <div className="h-0.5 w-12 bg-amber-500" />
-            <p className="text-amber-400/80 text-lg font-light tracking-widest uppercase">
-              I Can · You Can · We Can
+            <h1
+              className={`font-display text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[0.95] mb-4 transition-all duration-700 delay-200 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+              style={{ fontWeight: 800 }}
+            >
+              {slide.title}
+              <br />
+              <span className="text-[#4ade80]">{slide.titleAccent}</span>
+            </h1>
+
+            <p className={`text-white/60 text-base lg:text-lg leading-relaxed max-w-md mb-10 transition-all duration-700 delay-300 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+              {slide.sub}
             </p>
-            <div className="h-0.5 flex-1 bg-gradient-to-r from-amber-500/50 to-transparent" />
-          </div>
 
-          <p
-            className="text-white/60 text-lg leading-relaxed max-w-lg mb-10"
-            style={{ animation: "slideInLeft 0.8s ease 1.4s both" }}
-          >
-            India's leading tin can manufacturer delivering premium quality packaging solutions
-            for food, industrial, and consumer applications.
-          </p>
+            <div className={`flex items-center gap-4 transition-all duration-700 delay-400 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+              <Link
+                to="/products"
+                className="btn-glow group inline-flex items-center gap-2 bg-white text-[#0f4a26] px-7 py-3.5 rounded-full font-bold text-sm hover:bg-[#4ade80] hover:text-[#0a2e1a] transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                Explore Products
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-medium transition-colors border-b border-white/30 hover:border-white pb-0.5"
+              >
+                Get Quote →
+              </Link>
+            </div>
 
-          {/* CTAs */}
-          <div
-            className="flex flex-wrap gap-4"
-            style={{ animation: "slideInLeft 0.8s ease 1.6s both" }}
-          >
-            <button
-              onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
-              className="group relative px-8 py-4 bg-amber-500 text-black font-bold text-base uppercase tracking-wider overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-amber-500/40"
-            >
-              <span className="relative z-10">Explore Products</span>
-              <span className="absolute inset-0 bg-amber-300 translate-x-full group-hover:translate-x-0 transition-transform duration-300" />
-            </button>
-            <button
-              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-              className="group px-8 py-4 border border-amber-500/50 text-amber-400 font-semibold text-base uppercase tracking-wider hover:border-amber-500 hover:bg-amber-500/10 transition-all duration-300"
-            >
-              Get Quote
-              <span className="inline-block ml-2 transition-transform duration-300 group-hover:translate-x-2">→</span>
-            </button>
-          </div>
-
-          {/* Stats row */}
-          <div
-            className="grid grid-cols-3 gap-6 mt-14 pt-10 border-t border-white/10"
-            style={{ animation: "slideInLeft 0.8s ease 1.8s both" }}
-          >
-            {[
-              { value: "25+", label: "Years" },
-              { value: "500+", label: "Clients" },
-              { value: "50M+", label: "Cans Made" },
-            ].map((s) => (
-              <div key={s.label}>
-                <div
-                  className="text-3xl font-black text-amber-500"
-                  style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                >
-                  {s.value}
+            {/* Stats row */}
+            <div className={`flex items-center gap-8 mt-12 pt-8 border-t border-white/10 transition-all duration-700 delay-500 ${loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+              {[
+                { value: "25+", label: "Years" },
+                { value: "500+", label: "Clients" },
+                { value: "50M+", label: "Cans Made" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <div className="text-white font-display font-extrabold text-2xl">{stat.value}</div>
+                  <div className="text-white/50 text-xs uppercase tracking-wider">{stat.label}</div>
                 </div>
-                <div className="text-white/40 text-xs uppercase tracking-widest">{s.label}</div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Right — Can Image */}
+          <div className="relative flex justify-center items-end h-[480px] lg:h-[580px]">
+            {/* Splash background circle */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[380px] h-[380px] lg:w-[480px] lg:h-[480px] bg-white/8 rounded-full splash-anim" />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-[300px] h-[300px] lg:w-[360px] lg:h-[360px] bg-[#4ade80]/15 rounded-full blur-xl" />
+            </div>
+
+            {/* Can image */}
+            <img
+              src={heroCan}
+              alt="Premium Tin Can"
+              className={`relative z-10 float-anim h-[420px] lg:h-[520px] object-contain drop-shadow-2xl transition-all duration-700 delay-200 ${loaded ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}
+            />
+
+            {/* Floating badges */}
+            <div className={`absolute top-12 right-4 bg-white rounded-2xl px-4 py-3 shadow-xl transition-all duration-700 delay-600 ${loaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"}`}>
+              <div className="text-[#0f4a26] text-xs font-bold">ISO 9001:2015</div>
+              <div className="text-gray-500 text-[10px]">Certified</div>
+            </div>
+            <div className={`absolute bottom-16 left-4 bg-[#4ade80] rounded-2xl px-4 py-3 shadow-xl transition-all duration-700 delay-700 ${loaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"}`}>
+              <div className="text-[#0a2e1a] text-xs font-bold">100% Food Safe</div>
+              <div className="text-[#0a2e1a]/70 text-[10px]">FSSAI Compliant</div>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Right — Can Visual */}
-        <div className="flex items-center justify-center relative">
-          {/* Glow ring */}
-          <div className="absolute w-72 h-72 rounded-full border border-amber-500/20 animate-spin-slow" />
-          <div className="absolute w-80 h-80 rounded-full border border-amber-500/10" style={{ animation: "rotate360 12s linear infinite reverse" }} />
-
-          {/* Gold circle backdrop */}
-          <div className="absolute w-64 h-64 rounded-full bg-amber-500/5 blur-3xl" />
-          <div className="absolute w-48 h-48 rounded-full bg-amber-500/10 blur-xl" />
-
-          {/* Main can image */}
-          <img
-            src={canImg}
-            alt="Premium Tin Can"
-            className="relative z-10 w-64 h-64 lg:w-80 lg:h-80 object-contain animate-float-can animate-glow drop-shadow-2xl"
-            style={{ filter: "drop-shadow(0 0 30px hsla(43,84%,47%,0.4))" }}
-          />
-
-          {/* Floating labels */}
-          <div
-            className="absolute top-8 right-4 glass px-3 py-2 rounded-lg text-xs font-semibold text-amber-400 border border-amber-500/30"
-            style={{ animation: "floatSlow 3s ease-in-out infinite 0.5s" }}
-          >
-            ISO 9001:2015 ✓
-          </div>
-          <div
-            className="absolute bottom-16 left-0 glass px-3 py-2 rounded-lg text-xs font-semibold text-amber-400 border border-amber-500/30"
-            style={{ animation: "floatSlow 3.5s ease-in-out infinite" }}
-          >
-            100% Food Safe ✓
-          </div>
-          <div
-            className="absolute top-1/2 right-0 glass px-3 py-2 rounded-lg text-xs font-semibold text-amber-400 border border-amber-500/30"
-            style={{ animation: "floatSlow 4s ease-in-out infinite 1s" }}
-          >
-            BIS Approved ✓
-          </div>
+      {/* Slide Controls */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4">
+        <button
+          onClick={prev}
+          className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-200 hover:scale-110 active:scale-95 backdrop-blur-sm"
+        >
+          <ChevronLeft size={18} />
+        </button>
+        <div className="flex gap-2">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              className={`transition-all duration-300 rounded-full ${
+                i === active ? "w-7 h-2 bg-[#4ade80]" : "w-2 h-2 bg-white/30 hover:bg-white/50"
+              }`}
+            />
+          ))}
         </div>
+        <button
+          onClick={next}
+          className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-200 hover:scale-110 active:scale-95 backdrop-blur-sm"
+        >
+          <ChevronRight size={18} />
+        </button>
       </div>
 
       {/* Scroll indicator */}
-      <button
-        onClick={scrollToProducts}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/40 hover:text-amber-500 transition-colors duration-300"
-        style={{ animation: "fadeIn 1s ease 2.5s both" }}
-      >
-        <span className="text-xs uppercase tracking-widest">Scroll</span>
-        <ChevronDown size={20} className="animate-bounce" />
-      </button>
+      <div className="absolute bottom-8 right-10 hidden md:flex flex-col items-center gap-2">
+        <span className="text-white/40 text-[10px] uppercase tracking-widest font-medium">Scroll</span>
+        <div className="w-px h-12 bg-gradient-to-b from-white/40 to-transparent" />
+      </div>
     </section>
   );
 }
